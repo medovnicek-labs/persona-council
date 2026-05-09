@@ -46,15 +46,19 @@ Invocation: `/persona-council` (with the artifact in the conversation), or proac
 
 Invocation: `/persona-council audit` (after a recent council session in the same conversation).
 
-Runs the checks documented in `validation/INSIGHT_QUALITY.md` against the most recent council output:
+Scores the most recent council output on the 5-dimension MECE scorecard from `validation/INSIGHT_QUALITY.md`:
 
-- **Voice consistency** — did each persona stay in their established voice? If Dušan started saying "the user experience could be better," that's drift.
-- **Verdict diversity** — did personas actually disagree where they should? An all-APPROVE result usually means the council was rubber-stamping.
-- **Specificity** — are concerns concrete (citing specific UI elements / spec fields) or generic ("should be more polished")?
-- **Veto traceability** — when a persona vetoed, was the falsifiable condition stated?
-- **Persona drift** — does any persona's voice in this session contradict their persona file? If so, propose a persona-file update rather than re-running with a "corrected" voice.
+- **Grounding** (inputs) — does each claim trace to a specific input?
+- **Thickness** (interpretation) — does the output explain meaning + intent + context, or only behavior?
+- **Falsifiability** (epistemic form) — could each insight be proven wrong by a future observation?
+- **Actionability** (consequence) — does each finding convert into a named opportunity, JTBD outcome, or experiment?
+- **Adversariality** (bias structure) — did the council surface disconfirming evidence and persona disagreement, or collapse to consensus?
 
-Outputs a quality scorecard (0–10 per check) and a **proposed list of persona-file edits** if drift was detected. The human approves or rejects the edits — the skill never silently rewrites a persona.
+Returns:
+- 0–10 score per dimension + composite (max 50).
+- Specific evidence cited from the session for each score.
+- A **proposed list of persona-file edits** if drift was detected (council voiced something contradicting the persona file). The human approves or rejects — the skill never silently rewrites a persona.
+- Verdict: ship the synthesis (≥40), use with caveat (25–39), or discard and re-convene (<25).
 
 ### Research handoff
 

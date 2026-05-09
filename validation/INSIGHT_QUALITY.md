@@ -1,206 +1,181 @@
-# Insight quality validation — 9-point scorecard
+# Insight quality scorecard — 5-dimension MECE framework
 
-How to know whether a council session produced real insight or theatrical agreement. Run these checks after any council output.
+How to know whether a council session produced real insight or theatrical agreement. Five dimensions, mutually exclusive, collectively exhaustive. Run after any council output.
 
-The `/persona-council audit` skill mode runs all nine automatically against the most recent session in the conversation. You can also run them manually as a checklist.
+The `/persona-council audit` skill mode runs all five automatically against the most recent session. You can also run them manually as a checklist.
 
-## Why 9 points (and where they come from)
+## Why 5, not 9
 
-The scorecard is grounded in four established frameworks for qualitative research validity, plus one 2025 framework specific to AI-mediated personas:
+An earlier draft gave 9 dimensions drawn from Lincoln & Guba, Tracy, Yardley, NN/g and Wan et al. Honest re-read: those 9 weren't MECE — "coherence", "resonance", and "meaningful coherence" were three labels for one underlying construct, and several dimensions double-counted what others already measured.
 
-- **Lincoln & Guba (1985, *Naturalistic Inquiry*)** — Credibility, Transferability, Dependability, Confirmability. The default citation across qualitative methods textbooks; still the de facto standard in 2026.
-- **Tracy (2010, *Qualitative Inquiry*, "Big-Tent" criteria)** — Worthy topic, Rich rigor, Sincerity, Credibility, Resonance, Significant contribution, Ethics, Meaningful coherence. ~1,300+ citations; the dominant pedagogical alternative to Lincoln & Guba.
-- **Yardley (2000, *Psychology & Health*)** — Sensitivity to context, Commitment & rigour, Coherence & transparency, Impact & importance. Widely used in HCI/health research.
-- **Nielsen Norman Group, "How to Judge UX Evidence"** — Practitioner-grade criteria centered on diversity and actionability.
-- **Wan et al. (2025, *Whose Personae?*, arXiv:2512.00461)** — Application, Population, Data Source, Ecological Validity, Reproducibility, Generalizability — the only framework that directly addresses LLM persona fidelity.
+This v2 framework collapses the field along a single spine: **inputs → interpretation → epistemic form → consequence → bias structure**. Every meaningful failure mode of qualitative insight (and the LLM-specific one) lands in exactly one dimension. See **MECE check** below for the proof.
 
-The 9 dimensions below are specifically chosen for the persona-council use case (a council outputs concerns, vetoes, or approvals on PRDs/prompts/mockups). Each cites its source so future readers can trace the rationale.
+## Why these sources
+
+- **Geertz (1973), "Thick Description"** — the canonical statement of what makes ethnography ethnographic (winks vs twitches). [PDF](https://people.ucsc.edu/~ktellez/geertz1973.pdf)
+- **Spradley (1979), *The Ethnographic Interview*** — the Developmental Research Sequence; "informant talk" priority. [Publisher](https://www.waveland.com/browse.php?t=688)
+- **Wolcott (1990), "Making a Study More Ethnographic"** — distinguishes ethnographic *intent* from *technique*. [JSTOR](https://journals.sagepub.com/doi/10.1177/089124190019001003)
+- **Indi Young, *Listening Deeply*** — interior cognition and emic logic surfacing. [Essay](https://indiyoung.com/explanations-listening-deeply/)
+- **Teresa Torres, *Continuous Discovery Habits*** — opportunity solution trees, assumption→hypothesis translation. [Book site](https://www.producttalk.org/) · [Trees post](https://www.producttalk.org/opportunity-solution-trees/)
+- **Tony Ulwick, Outcome-Driven Innovation** — desired-outcome statements (verb + metric + object + context, "stable, measurable, solution-free"). [JTBD piece](https://jobs-to-be-done.com/inventing-the-perfect-customer-need-statement-4fb7de6ba999)
+- **Eric Ries, *The Lean Startup*** — leap-of-faith assumptions, validated learning. [Site](https://theleanstartup.com/book)
+- **Heath & Heath, *Decisive* (WRAP)** — "consider the opposite," reality-test assumptions. [Site](https://heathbrothers.com/books/decisive/)
+- **Nielsen Norman Group** — practitioner insight quality writing.
+- **Lincoln & Guba (1985), *Naturalistic Inquiry*** — confirmability + credibility (still the textbook baseline). [Summary](http://www.qualres.org/HomeLinc-3684.html)
+- **Wan et al. (2025), *Whose Personae?*, arXiv:2512.00461** — synthetic-persona LLM validity.
 
 ---
 
-## The 9 dimensions
+## The 5 dimensions
 
-### 1. Evidence-traced (0–10)
+### 1. Grounding (0–10)
 
-> *Source: Lincoln & Guba — Confirmability; Wan et al. — Data Source*
+> *Governs: inputs (where claims come from)*
+>
+> *Sources: Lincoln & Guba — confirmability + credibility; Spradley — informant talk priority (DRS steps 2–4); NN/g — diversity over volume*
 
-**Question:** Does each claim in the council output trace to a specific source — a quote in the persona file, a line in the artifact, an entry in `_provenance`, or a logged user observation?
+**Definition:** Every claim in the council output is traceable to a specific person, utterance, behavior, or artifact rather than to the LLM's prior.
 
-**Why it matters for AI personas specifically:** LLMs hallucinate plausible-sounding quotes and concerns. Without traceability, a "concern from Dušan" is the model's prior, not Dušan's voice.
+**Why it matters specifically for AI personas:** LLMs hallucinate plausible quotes. Without grounding, a "concern from Dušan" is the model's prior wearing Dušan's name. The single highest-leverage anti-slop check.
 
-**Scoring:**
-- 10: every claim cites a specific persona-file section or artifact line; verifiable in 30 seconds.
-- 5: claims are recognizable but require interpretation to trace back.
-- 0: zero traceability — claims could come from any source, or from nowhere.
+**Rubric:**
+- **10** — every non-trivial claim cites a specific input (transcript line, support ticket, prior session, observed behavior); the persona could not have produced this claim without that input.
+- **5** — mixes grounded fragments with confident generalizations.
+- **0** — ungrounded assertions only; could be the base model talking.
 
-### 2. Action-leading (0–10)
+### 2. Thickness (0–10)
 
-> *Source: Yardley — Impact & importance; Tracy — Significant contribution; NN/g — Actionability*
+> *Governs: interpretation depth (how meaning is constructed from inputs)*
+>
+> *Sources: Geertz — thick description (the wink); Wolcott — ethnographic intent; Indi Young — interior cognition*
 
-**Question:** Does each insight yield an obvious next step the team can take this week — build X, kill Y, research Z, ship a fix in field A?
+**Definition:** Findings explain the **meaning, intent, and context** behind behavior — not just the behavior itself.
 
-**Why it matters:** A council that produces ambient anxiety doesn't ship products. If the synthesis ends with "this is concerning" and nothing else, the session was a status check, not an insight.
+**Why it matters specifically for AI personas:** LLMs default to thin description ("user wants faster checkout"). Thickness forces the council to surface the *why* — emic logic, emotional reaction, guiding principle — which is where real product moves live. A thin council output describes the twitch; a thick one explains the wink.
 
-**Scoring:**
-- 10: every insight is paired with a recommended action specific enough to assign to a person and complete in <5 days.
-- 5: actions are implied but require translation; "improve X" is actionable in spirit but not in practice.
-- 0: pure reaction; the team would have to convene a second meeting to figure out what to do.
+**Rubric:**
+- **10** — behavior + intent + context + at least one emic frame the team could not have written from memory.
+- **5** — behavior plus one motivational layer.
+- **0** — pure behavioral surface; no interpretation.
 
-### 3. Alignment-shaping (0–10)
+### 3. Falsifiability (0–10)
 
-> *Source: Tracy — Resonance, Meaningful coherence*
+> *Governs: epistemic form (how a claim could be wrong)*
+>
+> *Sources: Ries — leap-of-faith assumptions, validated learning; Torres — assumption→hypothesis translation; Popper underneath both*
 
-**Question:** Does the synthesis help the team converge on a direction OR split deliberately, with both options legible?
+**Definition:** Each insight is stated such that a future observation could prove it wrong.
 
-**Why it matters:** A 5-persona shrug is worse than 5 sharp disagreements. Council value comes from giving the team a shared mental map — even when the map shows two valid paths. The synthesis names the trade-off; the human picks.
+**Why it matters specifically for AI personas:** Persona output trends toward unfalsifiable poetry ("users feel a deep desire for craft"). Falsifiability is the gate between insight and experiment — the line between Lean Startup *validated learning* and aspirational consensus. Without it, the council is theatre.
 
-**Scoring:**
-- 10: synthesis presents a clear convergence/divergence map; team can pick a side or unite behind one without re-reading the whole session.
-- 5: synthesis is fair but doesn't structure the disagreement; team has to do its own meta-analysis.
-- 0: opinion soup; reader can't tell which views go together or where the trade-offs live.
+**Rubric:**
+- **10** — each major claim is paired with the specific observation, metric, or threshold that would disconfirm it.
+- **5** — claims are testable in principle but no metric/threshold given.
+- **0** — no testable claims.
 
-### 4. Voice fidelity (0–10)
+### 4. Actionability (0–10)
 
-> *Source: Tracy — Sincerity; Wan et al. — Ecological Validity*
+> *Governs: consequence (what the team does next)*
+>
+> *Sources: Ulwick — desired-outcome statement format; Torres — opportunity solution tree*
 
-**Question:** Did each persona stay in their established voice? Could a blind reader identify which persona said what?
+**Definition:** Findings convert into a concrete product move — opportunity, outcome statement, or experiment — with the unit of work named.
 
-**Why it matters:** If three personas sound like one Claude in three costumes, you have one opinion delivered three times. Distinct lexicon, distinct concerns, distinct values per persona is what makes the council more than an LLM monologue.
+**Why it matters specifically for AI personas:** Council output that doesn't change next week's roadmap is decoration. Actionability makes "so what?" answerable in one sentence, in a form the team can put on the board.
 
-**Scoring:**
-- 10: every persona's response is unmistakably theirs; you could blind-test and identify them.
-- 7: mostly in voice, one or two slips toward generic phrasing.
-- 4: voice is recognizable but watered down; reads more like "Claude doing personas" than the personas themselves.
-- 0: indistinguishable from a generic LLM response with persona names attached.
+**Rubric:**
+- **10** — each major finding yields a named opportunity, JTBD outcome statement, or experiment with success criteria, traceable to a specific finding.
+- **5** — generic implications ("we should improve onboarding").
+- **0** — pure observation; nothing to do.
 
-**Repair:** If voice is drifting consistently, the persona file is too thin. Strengthen "How they talk" with more verbatim quotes and the negative voice section ("things they would NEVER say").
+### 5. Adversariality (0–10)
 
-### 5. Verdict diversity (0–10)
+> *Governs: bias structure (what the council resists agreeing with)*
+>
+> *Sources: Heath & Heath — WRAP "consider the opposite"; Kahneman pre-mortem; Wan et al. on synthetic-persona agreement bias*
 
-> *Source: Lincoln & Guba — Credibility (triangulation); NN/g — Diversity*
+**Definition:** The council surfaces disconfirming evidence, persona disagreement, and at least one finding that contradicts the team's prior or business interest.
 
-**Question:** Did personas actually disagree where they should?
+**Why it matters specifically for AI personas:** Multi-persona LLMs collapse to consensus by default — the same base model agreeing with itself in five voices. Without an adversariality score, the council systematically launders confirmation bias as validation. This is the most dangerous failure mode and the one most invisible to the team that built it.
 
-**Why it matters:** Universal APPROVE = sycophancy. Universal VETO = doom-loop. Healthy councils show spread across verdict types, AND the spread tracks the personas' real-world differences (Dušan strict on spec, Eva loose; she's strict on UX, he's loose).
+**Rubric:**
+- **10** — at least one persona produces a finding that, if true, would kill the proposed feature, AND the team cannot easily dismiss it.
+- **5** — personas disagree on minor points; major direction unanimously approved.
+- **0** — unanimous, flattering; the council "loved" the artifact.
 
-**Scoring:**
-- 10: ≥3 distinct verdict types across personas, AND verdicts track real-world differences.
-- 7: some variation but two distinct personas reached the same verdict for similar reasons (suggests synthesis is collapsing them).
-- 4: verdicts cluster too tightly given the artifact's actual quality.
-- 0: every persona reached the same verdict for the same reason.
+---
 
-### 6. Specificity (0–10)
+## MECE check
 
-> *Source: NN/g — Specific over vague; Yardley — Commitment & rigour*
+Each dimension governs a distinct layer of the insight pipeline:
 
-**Question:** Are concerns concrete (citing specific UI elements, spec fields, code paths, copy fragments) or generic ("UX could be better")?
+| Layer | Dimension | Question it answers |
+|-------|-----------|---------------------|
+| Inputs | **Grounding** | Where do the claims come from? |
+| Interpretation | **Thickness** | How was meaning constructed from those inputs? |
+| Epistemic form | **Falsifiability** | How could the claim be proven wrong? |
+| Consequence | **Actionability** | What does the team do next? |
+| Bias structure | **Adversariality** | What did the council resist agreeing with? |
 
-**Why it matters for AI specifically:** LLMs default to generality. A council that produces "improve onboarding" is noise; "step 3 form has 12 fields, persona X abandons here" is signal. Specificity is the single biggest differentiator between useful councils and theatrical ones.
+**Mutually exclusive:** no dimension's score depends on another's. A council can be:
+- highly grounded but thin (transcript quotes, no meaning)
+- thick but unfalsifiable (rich ethnography, no test)
+- falsifiable but unactionable (testable but trivial)
+- actionable but ungrounded (decisive but invented)
+- adversarial but ungrounded (theatrical disagreement)
 
-**Scoring:**
-- 10: every concern cites a specific artifact element; the team could act on the synthesis without further questions.
-- 7: most concerns are concrete; one or two are vague.
-- 4: concerns are at the right altitude but lack specific citations.
-- 0: abstract aphorisms ("UX matters", "users want simplicity").
+Any of these failure modes is recoverable by improving exactly one dimension.
 
-**Repair:** If specificity is low, the persona's `Council role` questions are too abstract. Rewrite them to demand concrete answers ("Show me where in the cut list X is marked" — not "Is the cut list complete?").
-
-### 7. Veto traceability (0–10)
-
-> *Source: Lincoln & Guba — Dependability (audit trail); Tracy — Rich rigor*
-
-**Question:** When a persona vetoed, did they show their work — which constraint, which prior evidence, which falsifiable condition would lift the veto?
-
-**Why it matters:** A blocking veto must be appealable. Without a stated condition, a veto is an unappealable vibe — it shuts down conversation without giving the team a path forward.
-
-**Good veto:** "VETO. Condition: spec must include `right_side.visible: true` and `right_side.material` matching the door material."
-
-**Bad veto:** "VETO. This isn't ready."
-
-**Scoring:**
-- 10: every veto has a clear, falsifiable condition; references the persona's `Veto criteria` section.
-- 5: vetoes have conditions but they're soft ("more polished", "more professional").
-- 0: vetoes are emotional / unconditional.
-
-### 8. Transferability (0–10)
-
-> *Source: Lincoln & Guba — Transferability; Wan et al. — Generalizability*
-
-**Question:** Does the critique generalize beyond the single PRD/mockup, or is it overfit to today's exact wording?
-
-**Why it matters:** A council that picks at typos and surface phrasing isn't earning its keep. Insights that apply to a class of artifacts ("any consumer-facing surface should hide JSON") have ongoing leverage; insights that only apply to today's draft die when the draft changes.
-
-**Scoring:**
-- 10: explicit scope statement on each major insight; the insight applies to a class of artifacts, not just this one.
-- 5: insights are useful here but ambiguous about whether they generalize.
-- 0: surface-bound critique that won't survive the next revision.
-
-### 9. Drift / sycophancy resistance (0–10)
-
-> *Source: Tracy — Sincerity; synthetic-persona literature on agreement bias (Wan et al.)*
-
-**Question:** Did the council's critique strength stay stable or strengthen across rounds? Or did it monotonically warm up to the team's framing?
-
-**Why it matters:** LLM personas drift toward the user's framing across turns. By the third refinement round, the council that vetoed in round one is approving in round three — not because the artifact got better, but because the model is being agreeable. This is the single most dangerous failure mode.
-
-**Scoring:**
-- 10: critique strength is stable or rising across rounds; vetoes that lifted did so because conditions were met (verifiable).
-- 5: some warming but vetoes still hold when conditions aren't met.
-- 0: monotonic agreement increase; council "comes around" without the artifact actually changing.
-
-**Repair:** If drift is consistent, re-anchor each session by re-reading the persona file from disk before responding. Audit mode catches multi-turn drift specifically.
+**Collectively exhaustive:** the four canonical failure modes of qualitative insight work are (1) thin source material, (2) shallow interpretation, (3) untestable claims, (4) unimplementable conclusions — covered by Grounding / Thickness / Falsifiability / Actionability. The fifth, Adversariality, is the LLM-specific failure mode (consensus collapse) that doesn't appear in pre-AI frameworks because human research subjects don't all share the same base model. With those five, every meaningful way a council output can be wrong is named.
 
 ---
 
 ## Composite score
 
-Weights — adjust per team taste, but these are the defaults:
-
-| Dim | Weight | Reasoning |
-|-----|--------|-----------|
-| 1. Evidence-traced | 2× | Foundational; without this, nothing else matters. |
-| 2. Action-leading | 2× | The output's reason for existing. |
-| 3. Alignment-shaping | 1× | Important but downstream of the above. |
-| 4. Voice fidelity | 1× | Quality but not foundational. |
-| 5. Verdict diversity | 2× | The single biggest sycophancy signal. |
-| 6. Specificity | 2× | Differentiates useful from theatrical. |
-| 7. Veto traceability | 1× | Important when it matters; rarely catastrophic when soft. |
-| 8. Transferability | 1× | Nice-to-have; absent in many useful sessions. |
-| 9. Drift resistance | 2× | Catches the most dangerous failure mode. |
-
-**Max:** 140.
+Equal weighting unless your team has a reason to skew. Max: 50.
 
 | Score | Verdict |
 |-------|---------|
-| 112–140 | Strong. Ship the synthesis. |
-| 70–111 | Usable but with caveats. Note the weak dimensions in the synthesis hand-off. |
-| <70 | Discard the session. Repair the personas or the artifact framing, then re-convene. |
+| 40–50 | Strong. Ship the synthesis. |
+| 25–39 | Usable but flag the weakest dimension explicitly in the hand-off. |
+| <25 | Discard the session. Repair personas, sharpen the artifact, or improve the prompt before re-convening. |
+
+**When to skew weights:** if the team has a recurring failure mode (e.g., consistently high specificity but low adversariality), double-weight the failing dimension for the next 30 days to force attention there. Reset to equal weights after recalibration.
 
 ## When all sessions score high
 
 That's a flag, not a win. Either:
-- Every session really is going well (rare; check the verdict-diversity and drift-resistance columns first).
-- The audit itself is being too friendly. Have a human spot-check one session per month against this checklist with no audit-skill assistance.
+- The council really is producing strong insight — verify by checking whether shipped features were predicted correctly (see `CALIBRATION.md`).
+- The audit is being too friendly. Spot-check one session per month with a human reading the rubric directly, no audit-skill assistance.
 
 ## When all sessions score low
 
-Two failure modes:
-- **Personas are too thin.** Go back to `research/METHODOLOGY.md` and source more evidence for each persona.
-- **Artifacts are too vague.** The council can't be specific about something that's itself vague. Ask for sharper artifacts before convening.
+Two failure modes to investigate first:
+- **Personas are too thin.** Most low-Grounding sessions trace here. Go back to `research/METHODOLOGY.md` and source more evidence.
+- **Artifacts are vague.** The council can't be specific about something that's itself vague. Insist on sharper PRDs/prompts before convening.
 
-## Considered and rejected
+---
 
-Two dimensions from the source frameworks were left out deliberately:
+## What changed from the 9-dim v1
 
-- **Ethics / consent** (Tracy criterion 7). Personas are synthetic; no human subjects under IRB. Including would be ceremonial.
-- **Reproducibility per session** (Wan et al.). Reproducibility belongs at the *infrastructure* layer (pinned model versions, persona doc hashes, seed) — not at the per-output gate. Re-running and getting *identical* critiques would be a failure mode for a creative council, not a success.
+| v1 dimension | v2 home | Notes |
+|---|---|---|
+| Evidence-traced | **Grounding** | Renamed; identical concept. |
+| Specificity | **Grounding + Actionability** | Was doing two jobs — split between input quality and output usefulness. |
+| Voice fidelity | dropped | Belongs in council *mechanism* QA (is the persona file rich enough?), not *insight* quality. Tracked separately in `CALIBRATION.md`. |
+| Verdict diversity | **Adversariality** | Sharpened — diversity isn't enough; need *productive* disagreement. |
+| Veto traceability | **Falsifiability** | A veto needs a falsifiable lift condition; same construct. |
+| Action-leading | **Actionability** | Renamed. |
+| Alignment-shaping | dropped | Was a softer restatement of Actionability + Adversariality combined. |
+| Transferability | dropped | Important for academic work; not how product councils get used (each session is bound to a specific artifact). |
+| Drift / sycophancy resistance | **Adversariality** | Folded in — drift is the multi-turn version of consensus collapse. |
 
-## Sources
+Honest note: the v1 framework rewarded vocabulary, not signal. v2 is shorter because it stopped re-stating the same construct in three different academic dialects.
 
-- [Tracy (2010), *Eight "Big-Tent" Criteria*, *Qualitative Inquiry*](https://www.sarahjtracy.com/wp-content/uploads/2013/07/Tracy-QI-Qualitative-Quality-8-big-tent-criteria.pdf)
-- [Lincoln & Guba criteria summary, RWJF](http://www.qualres.org/HomeLinc-3684.html)
-- [Pillars of trustworthiness, ScienceDirect 2024](https://www.sciencedirect.com/science/article/pii/S2949916X24000045)
-- [Yardley's evaluative criteria](http://www.qualres.org/HomeYard-3688.html)
-- [NN/g, How to Judge UX Evidence](https://www.nngroup.com/articles/ux-evidence/)
-- [Wan et al., *Whose Personae?*, arXiv:2512.00461](https://arxiv.org/html/2512.00461v1)
-- [What Makes a Good Research Insight Great?, UXmatters](https://www.uxmatters.com/mt/archives/2017/06/what-makes-a-good-research-insight-great.php)
+## Considered and rejected for v2
+
+- **Novelty** (does the council surface something the team didn't already know?) — tempting, but it's a *function of* Grounding × Thickness × Adversariality. Scoring it separately double-counts.
+- **Persona fidelity** (does each persona stay in character?) — matters for council *mechanism* QA, not *insight* quality. Belongs in `CALIBRATION.md`.
+- **Coherence / Resonance / Meaningful coherence** (Tracy / Yardley) — three labels for one writing-quality construct. Dropped: not insight quality.
+- **Ethical reflexivity** — important separately (governance, IRB-equivalent), but not a per-output gate for synthetic personas.
+- **Reproducibility per session** — belongs at infrastructure (pinned model versions, persona doc hashes), not the per-output gate. Re-running and getting *identical* critiques would be a failure mode for a creative council.
