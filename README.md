@@ -44,10 +44,11 @@ This skill bets on:
 Requires [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 ```bash
-git clone --depth 1 https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council
+git clone --depth 1 https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council \
+  && cd ~/.claude/skills/persona-council && ./setup
 ```
 
-That's it. Both `/persona-council` and `/persona-research` are now available in any Claude Code session. See `docs/INSTALL.md` for project-specific setup (where to put your persona files, optional `_council.yaml` config).
+That's it. Both `/persona-council` and `/persona-research` are now available in any Claude Code session. The `setup` script symlinks each skill into Claude Code's discovery layout; re-run after `git pull` to update. See `docs/INSTALL.md` for project-specific setup (where to put your persona files, optional `_council.yaml` config).
 
 ## Use it without running it
 

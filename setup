@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# persona-council setup — symlink each skill into Claude Code's discovery layout.
+#
+# After `git clone https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council`,
+# run `cd ~/.claude/skills/persona-council && ./setup` to make the skills
+# discoverable by Claude Code.
+#
+# Idempotent — safe to re-run after `git pull`.
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_PARENT="$(dirname "$REPO_DIR")"
+
+if [[ "$(basename "$SKILLS_PARENT")" != "skills" ]]; then
+    echo "warning: this repo is not under ~/.claude/skills/" >&2
+    echo "  current: $REPO_DIR" >&2
+    echo "  expected layout: ~/.claude/skills/persona-council/" >&2
+    echo ""
+    echo "Re-clone with:" >&2
+    echo "  git clone https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council" >&2
+    exit 1
+fi
+
+# Each skill in ./skills/<name>/SKILL.md → ~/.claude/skills/<name>/SKILL.md
+linked=()
+for skill_dir in "$REPO_DIR"/skills/*/; do
+    [[ -d "$skill_dir" ]] || continue
+    skill_name="$(basename "$skill_dir")"
+    target="$skill_dir/SKILL.md"
+
+    if [[ ! -f "$target" ]]; then
+        echo "skip: $skill_name (no SKILL.md found)" >&2
+        continue
+    fi
+
+    install_dir="$SKILLS_PARENT/$skill_name"
+
+    # Special-case: the persona-council skill installs INSIDE this repo's dir
+    # itself (since we're at $SKILLS_PARENT/persona-council). Just put the
+    # symlink at SKILL.md in our own directory.
+    if [[ "$skill_name" == "persona-council" ]]; then
+        ln -sf "$target" "$REPO_DIR/SKILL.md"
+        linked+=("persona-council (in-place)")
+        continue
+    fi
+
+    mkdir -p "$install_dir"
+    ln -sf "$target" "$install_dir/SKILL.md"
+    linked+=("$skill_name → $install_dir/SKILL.md")
+done
+
+echo "persona-council ready (${#linked[@]} skills linked):"
+for entry in "${linked[@]}"; do
+    echo "  • $entry"
+done
+echo ""
+echo "Next: open Claude Code in any project. Try:"
+echo "  /persona-council  [share a PRD or feature description]"
+echo "  /persona-research [paste an interview transcript]"
+echo ""
+echo "Personas auto-discover from <cwd>/docs/personas/council/*.md."
+echo "See docs/INSTALL.md for project-specific setup."

@@ -3,10 +3,19 @@
 ## Install the skill globally
 
 ```bash
-git clone --depth 1 https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council
+git clone --depth 1 https://github.com/medovnicek-labs/persona-council.git ~/.claude/skills/persona-council \
+  && cd ~/.claude/skills/persona-council && ./setup
 ```
 
-That installs both `/persona-council` and `/persona-research` into Claude Code. They're available in every session, every project. Update by running `cd ~/.claude/skills/persona-council && git pull`.
+That installs both `/persona-council` and `/persona-research` into Claude Code. They're available in every session, every project. The `setup` script symlinks each skill into the per-skill directories Claude Code expects (`~/.claude/skills/<skill-name>/SKILL.md`); it's idempotent.
+
+Update by running:
+
+```bash
+cd ~/.claude/skills/persona-council && git pull && ./setup
+```
+
+(The second `setup` re-runs the symlinks in case new skills were added in the update.)
 
 To add the global skills section to your `~/.claude/CLAUDE.md` (so Claude knows to prefer the universal skill over any project-local copies):
 
