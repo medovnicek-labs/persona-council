@@ -1,0 +1,37 @@
+# Ponkoid council config
+#
+# Real config lives at: github.com/medovnicek-labs/ponkoid/docs/personas/council/_council.yaml
+# This copy is the public reference example.
+
+product: ponkoid
+description: |
+  Consumer + carpenter personas for the Ponkoid wardrobe designer.
+  Dušan represents the B2B carpenter segment (real user, ongoing relationship).
+  Eva represents the consumer segment (synthetic — built from the consumer
+  pivot research; will be re-grounded once we have ≥3 real consumer interviews).
+
+default_personas:
+  - dusan-carpenter
+  - eva-consumer
+
+routing:
+  # Both personas weigh in on user-facing PRDs and feature decisions.
+  prd: [dusan-carpenter, eva-consumer]
+  feature: [dusan-carpenter, eva-consumer]
+
+  # Dušan owns spec accuracy; Eva would be lost in raw prompt engineering.
+  prompt: [dusan-carpenter]
+  spec: [dusan-carpenter]
+  cut-list: [dusan-carpenter]
+
+  # Eva owns consumer surface UX; Dušan doesn't care about the marketing site.
+  ui-mockup: [eva-consumer]
+  marketing-copy: [eva-consumer]
+  onboarding: [eva-consumer]
+
+  # Pricing affects both segments.
+  pricing: [dusan-carpenter, eva-consumer]
+
+# When future cross-portfolio personas exist (founder, investor, etc.),
+# uncomment and point at the central directory.
+# cross_portfolio_path: ~/my-git/persona-council/examples/_shared

@@ -1,0 +1,62 @@
+# Medovnicek Labs portfolio → personas mapping
+#
+# This file documents which products in the Medovnicek portfolio use which
+# personas. Forks of this repo should replace this with their own mapping.
+#
+# The persona-council skill does NOT read this file — it discovers personas
+# from <cwd>/docs/personas/council/*.md. This file is documentation for
+# human navigation across the portfolio.
+
+studio:
+  name: Medovnicek Labs
+  url: https://medovnicek.com
+  github_org: medovnicek-labs
+
+products:
+  ponkoid:
+    repo: github.com/medovnicek-labs/ponkoid
+    persona_path: docs/personas/council/
+    domain: parametric furniture design (consumer + B2B)
+    status: shipping
+    primary_personas:
+      - dusan-carpenter      # real user (carpenter segment)
+      - eva-consumer         # synthetic (consumer segment)
+    notes: |
+      Consumer pivot landed 2026-05-02. Eva persona added then.
+      Dušan rooted in real interviews + ongoing relationship.
+
+  crm:
+    repo: github.com/medovnicek-labs/crm
+    persona_path: docs/personas/council/
+    domain: knowledge-graph CRM (gbrain pattern, multi-product)
+    status: scaffold-pending
+    primary_personas: []
+    notes: |
+      Will inherit personas when the repo lands. Likely candidates:
+      pavol-founder, dominik-tech-lead, future investor persona.
+
+  medovnicek-com:
+    repo: github.com/medovnicek-labs/medovnicek-com
+    persona_path: docs/personas/council/
+    domain: studio landing page
+    status: pending
+    primary_personas: []
+    notes: |
+      Marketing surface — likely doesn't need its own council. Will
+      convene cross-portfolio personas (founder, investor, recruit)
+      when needed.
+
+shared_personas:
+  # Cross-portfolio personas live at examples/_shared/ (when populated).
+  # Product `_council.yaml` files reference this path via cross_portfolio_path.
+  pavol-founder:
+    status: not-yet-written
+  dominik-tech-lead:
+    status: not-yet-written
+  investor-prospect:
+    status: not-yet-written
+
+# Discovery convention used across the portfolio:
+#   <product-repo>/docs/personas/council/*.md            — product-local personas
+#   <product-repo>/docs/personas/council/_council.yaml   — routing + overlay config
+#   ~/my-git/persona-council/examples/_shared/*.md       — cross-portfolio personas
